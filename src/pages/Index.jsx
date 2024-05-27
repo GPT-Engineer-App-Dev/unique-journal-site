@@ -1,30 +1,28 @@
-import { Box, Container, Flex, Heading, Link, Stack, Text, VStack } from "@chakra-ui/react";
+import { Box, Container, Flex, Heading, Link, Stack, Text, VStack, Button } from "@chakra-ui/react";
 import { FaTwitter, FaLinkedin, FaGithub } from "react-icons/fa";
-
-const posts = [
-  {
-    title: "First Blog Post",
-    date: "October 1, 2023",
-    excerpt: "This is a short excerpt of the first blog post. It gives a brief overview of the content.",
-  },
-  {
-    title: "Second Blog Post",
-    date: "October 5, 2023",
-    excerpt: "This is a short excerpt of the second blog post. It gives a brief overview of the content.",
-  },
-];
+import { useEffect, useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 
 const Index = () => {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const storedPosts = JSON.parse(localStorage.getItem("posts")) || [];
+    setPosts(storedPosts);
+  }, []);
+
   return (
     <Container maxW="container.lg" p={4}>
       <Flex as="nav" bg="gray.100" p={4} mb={8} justifyContent="space-between" alignItems="center">
         <Heading as="h1" size="lg">My Blog</Heading>
         <Stack direction="row" spacing={4}>
-          <Link href="/">Home</Link>
-          <Link href="/about">About</Link>
-          <Link href="/contact">Contact</Link>
+          <Link as={RouterLink} to="/">Home</Link>
+          <Link as={RouterLink} to="/about">About</Link>
+          <Link as={RouterLink} to="/contact">Contact</Link>
         </Stack>
       </Flex>
+
+      <Button as={RouterLink} to="/new-post" colorScheme="blue" mb={8}>Add New Post</Button>
 
       <Flex direction={{ base: "column", md: "row" }} justifyContent="space-between">
         <Box flex="3">
@@ -32,7 +30,7 @@ const Index = () => {
             <Box key={index} mb={8} p={4} borderWidth="1px" borderRadius="md">
               <Heading as="h2" size="md" mb={2}>{post.title}</Heading>
               <Text fontSize="sm" color="gray.500" mb={2}>{post.date}</Text>
-              <Text>{post.excerpt}</Text>
+              <Text>{post.content}</Text>
             </Box>
           ))}
         </Box>
